@@ -1,0 +1,9 @@
+#!/bin/sh -xe
+
+exec 2>&1
+export LC_ALL=en_US.utf8
+export LANG=en_US.utf8
+
+cd {{pkg.svc_data_path}}/app
+
+FLASK_APP=index.py {{pkg.path}}/app/bin/flask run

@@ -1,0 +1,5 @@
+#!/bin/sh -xe
+
+exec 2>&1
+
+cp -R {{pkg.path}}/app {{pkg.svc_data_path}}

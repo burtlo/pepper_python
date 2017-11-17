@@ -2,4 +2,14 @@
 
 exec 2>&1
 
+#
+# All the source exists in this app directory. Python when run generates .pyc
+# files. I assume that they are generated in the same directory as the source
+# file so it seemed right to move them into the service diretory and in this
+# case te data directory instead of creating any directories.
+#
+# Actually I tried creating a directory and opted not to because it then all
+# of a sudden required that I make the service user 'root'. Using the existing
+# dir in this case feels appropriate.
+
 cp -R {{pkg.path}}/app {{pkg.svc_data_path}}

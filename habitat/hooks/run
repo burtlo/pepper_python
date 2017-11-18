@@ -14,7 +14,7 @@ export LANG={{cfg.lang}}
 # Define the application environment variable. Right now this entry point is
 # specified in the defaults.toml.
 
-export FLASK_APP={{cfg.app.instance}}
+export FLASK_APP={{pkg.svc_data_path}}/app/{{cfg.app.instance}}
 
 #
 # Time to start the application. This is where the pathing does not very
@@ -22,5 +22,4 @@ export FLASK_APP={{cfg.app.instance}}
 # are still within the package but with no binaries on the path I have this
 # bizarre path where things were vendored.
 
-cd {{pkg.svc_data_path}}/app
-exec {{pkg.path}}/app/bin/flask run -p {{cfg.app.port}}
+exec {{pkg.path}}/bin/flask run -p {{cfg.app.port}}

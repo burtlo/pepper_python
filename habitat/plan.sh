@@ -4,6 +4,9 @@ pkg_version="0.1.0"
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=('Apache-2.0')
 pkg_deps=(core/python)
+pkg_bin_dirs=(bin)
+pkg_lib_dirs=(lib)
+pkg_include_dirs=(include)
 
 do_build() {
   return 0
@@ -18,7 +21,7 @@ do_install() {
   app_dir=$pkg_prefix/app
   mkdir $app_dir
   cp index.py $app_dir/
-  cp requirements.txt $app_dir
+  cp requirements.txt $app_dir/
 
   # It had a single requirement on Flask. Which of course has it's own reqs.
   #
@@ -34,26 +37,23 @@ do_install() {
   # Now with the application copied into in the package I needed to get all of
   # its dependencies vendored into the package as well.
 
-  cd $app_dir
+  cd $pkg_prefix
   python -m venv .
 
   # It seemed the most straight-forward way to vendor all the libraries was to
-  # define a virtual environment within the package. When reviewing it in my
-  # head I think that should have been done at the root of the app to see if
-  # the bin, lib and all the resulting tools would end up in the right place.
-  # Any of those directories found would need to be described up above in the
-  # plan definition.
-
+  # define a virtual environment within the package.
   #
-  # And this is where I need to explore more. I sourced this file so that when
-  # I use pip next to install the dependencies it knows to store them locally.
+  # I do this in the package root to create a `bin`, `lib`, and `include` which
+  # are included in the package definition. This does not put the dependencies
+  # on the path. However, if the dependencies were vendored, packaged in their
+  # own Habitat package, then added as a dependency of this package it would
+  # have all the tools on the path as one would expect.
 
-  source bin/activate
-  pip install -r requirements.txt
+  bin/pip install -r $app_dir/requirements.txt
 
   # It seems like if I used the pip found in the build dependency `core/python`
-  # those resulting dependencies would mutate the `core/python` package. I think
-  # I found the flask binary was there and not in the package I'm currently
-  # building.
+  # those resulting dependencies would mutate the `core/python` package -
+  # installing them there. By using this vendored pip the dependencies will
+  # be placed here in the `bin`, `lib`, and `include`.
 
 }

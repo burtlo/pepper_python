@@ -12,4 +12,4 @@ exec 2>&1
 # of a sudden required that I make the service user 'root'. Using the existing
 # dir in this case feels appropriate.
 
-cp -R {{pkg.path}}/app {{pkg.svc_data_path}}
+exec cp -R {{pkg.path}}/app {{pkg.svc_data_path}}

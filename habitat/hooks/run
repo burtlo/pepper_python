@@ -6,17 +6,21 @@ exec 2>&1
 # I found that there was an error when running the application when it came to
 # the language. By default it stated that the code was going to run in ASCII
 # and I think that one of the libraries had an issue with that. When I started
-# searching I came across this as a solution. These values should probably
-# placed into the `default.toml` similar to what I have seen in scaffolding-ruby.
+# searching I came across this as a solution.
+export LC_ALL={{cfg.lang}}
+export LANG={{cfg.lang}}
 
-export LC_ALL=en_US.utf8
-export LANG=en_US.utf8
+#
+# Define the application environment variable. Right now this entry point is
+# specified in the defaults.toml.
+
+export FLASK_APP={{cfg.app.instance}}
 
 #
 # Time to start the application. This is where the pathing does not very
-# intuitive. The appl is inside the data path. But the libraries and binaries
-# are still within the package but no binaries on the path.
+# intuitive. The app is inside the data path. But the libraries and binaries
+# are still within the package but with no binaries on the path I have this
+# bizarre path where things were vendored.
 
 cd {{pkg.svc_data_path}}/app
-
-FLASK_APP=index.py {{pkg.path}}/app/bin/flask run
+exec {{pkg.path}}/app/bin/flask run -p {{cfg.app.port}}
